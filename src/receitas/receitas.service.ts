@@ -6,31 +6,7 @@ import { CriarReceitaDto } from './dto/criar-receita.dto';
 
 @Injectable()
 export class ReceitasService {
-  /*private receitas: Receita[] = [
-    {
-        "id": 1,
-        "titulo": "Bolo de cenoura",
-        "ingredientes": [
-            "cenoura",
-            "farinha",
-            "ovos",
-            "leite"
-        ],
-        "modoDeFazer": "Misture os ingredientes e asse o bolo por 1h"
-    },
-    {
-        "id": 2,
-        "titulo": "Bolo de chocolate",
-        "ingredientes": [
-            "chocolate",
-            "farinha",
-            "ovos",
-            "leite"
-        ],
-        "modoDeFazer": "Misture os ingredientes e asse o bolo por 1h"
-    }
-];*/
-
+  
   constructor(
     @InjectRepository(Receita)
     private readonly receitaRepository: Repository<Receita>,
