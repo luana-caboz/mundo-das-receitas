@@ -1,61 +1,65 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Receita } from './receitas.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CriarReceitaDto } from './dto/criar-receita.dto';
 
 @Injectable()
 export class ReceitasService {
-  private receitas: Receita[] = [];
-  private idAtual: number = 0;
-
-  private gerarIdUnico(): number {
-    this.idAtual += 1;
-    return this.idAtual;
-  }
-
-  criarReceita(
-    titulo: string,
-    ingredientes: string[],
-    modoDeFazer: string,
-  ): Receita {
-    const novaReceita: Receita = {
-      id: this.gerarIdUnico(),
-      titulo,
-      ingredientes,
-      modoDeFazer,
-    };
-    this.receitas.push(novaReceita);
-    return novaReceita;
-  }
-
-  listarReceitas(): Receita[] {
-    return this.receitas;
-  }
-
-  buscarReceitaPorId(id: number): Receita {
-    return this.receitas.find((receita) => receita.id === id);
-  }
-
-  atualizar(id: number, dadosAtualizados: Partial<Receita>): Receita {
-    const receitaIndex = this.receitas.findIndex((r) => r.id === id);
-
-    if (receitaIndex === -1) {
-      throw new NotFoundException(`Receita com ID ${id} não encontrada`);
+  /*private receitas: Receita[] = [
+    {
+        "id": 1,
+        "titulo": "Bolo de cenoura",
+        "ingredientes": [
+            "cenoura",
+            "farinha",
+            "ovos",
+            "leite"
+        ],
+        "modoDeFazer": "Misture os ingredientes e asse o bolo por 1h"
+    },
+    {
+        "id": 2,
+        "titulo": "Bolo de chocolate",
+        "ingredientes": [
+            "chocolate",
+            "farinha",
+            "ovos",
+            "leite"
+        ],
+        "modoDeFazer": "Misture os ingredientes e asse o bolo por 1h"
     }
+];*/
 
-    this.receitas[receitaIndex] = {
-      ...this.receitas[receitaIndex],
-      ...dadosAtualizados,
-    };
+  constructor(
+    @InjectRepository(Receita)
+    private readonly receitaRepository: Repository<Receita>,
+  ) {}
 
-    return this.receitas[receitaIndex];
+  criarReceita(criarReceitaDto: CriarReceitaDto): Promise<Receita> {
+    const novaReceita = new Receita();
+    novaReceita.titulo = criarReceitaDto.titulo;
+    novaReceita.ingredientes= criarReceitaDto.ingredientes;
+    novaReceita.modoDeFazer = criarReceitaDto.modoDeFazer;
+
+    return this.receitaRepository.save(novaReceita);
   }
 
-  deletar(id: number): void {
-    const receitaIndex = this.receitas.findIndex((r) => r.id === id);
+  listarReceitas(): Promise<Receita[]> {
+    return this.receitaRepository.find();
+  }
 
-    if (receitaIndex === -1) {
-      throw new NotFoundException(`Receita com ID ${id} não encontrada`);
-    }
+  buscarReceitaPorId(id: number): Promise<Receita> {
+    return this.receitaRepository.findOneBy({id});
+  }
 
-    this.receitas.splice(receitaIndex, 1);
+  atualizar(id: number, dadosAtualizados: Partial<Receita>): Promise<Receita> {
+    this.receitaRepository.update(id, dadosAtualizados)
+    return this.receitaRepository.findOneBy({id});
+
+  }
+
+  deletar(id: string): void {
+    this.receitaRepository.delete(id);
   }
 }

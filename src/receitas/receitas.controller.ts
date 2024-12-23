@@ -8,18 +8,18 @@ export class ReceitasController {
   constructor(private readonly receitasService: ReceitasService) {}
 
   @Post()
-  criarReceita(@Body() criarReceitaDto: CriarReceitaDto): Receita {
+  criarReceita(@Body() criarReceitaDto: CriarReceitaDto): Promise<Receita> {
     const { titulo, ingredientes, modoDeFazer } = criarReceitaDto;
-    return this.receitasService.criarReceita(titulo, ingredientes, modoDeFazer);
+    return this.receitasService.criarReceita(criarReceitaDto);
   }
 
   @Get()
-  listarReceitas(): Receita[] {
+  listarReceitas(): Promise<Receita[]> {
     return this.receitasService.listarReceitas();
   }
 
   @Get(':id')
-  buscarReceita(@Param('id') id: number): Receita {
+  buscarReceita(@Param('id') id: number): Promise<Receita> {
     return this.receitasService.buscarReceitaPorId(id);
   }
 
@@ -27,12 +27,12 @@ export class ReceitasController {
   atualizarReceita(
     @Param('id') id: number,
     @Body() dadosAtualizados: Partial<Receita>,
-  ): Receita {
+  ): Promise<Receita> { console.log({id, dadosAtualizados});
     return this.receitasService.atualizar(id, dadosAtualizados);
   }
 
   @Delete(':id')
-  deleteReceita(@Param('id') id: number): void {
+  deleteReceita(@Param('id') id: string): void {
     this.receitasService.deletar(id);
   }
 }

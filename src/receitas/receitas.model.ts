@@ -1,6 +1,16 @@
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
 export class Receita {
+    @PrimaryGeneratedColumn()
     id: number; 
-    titulo: string; 
-    ingredientes: string[]; 
+
+    @Column()
+    titulo: string;
+    
+    @Column('simple-array')
+    ingredientes: string[];
+    
+    @Column()
     modoDeFazer: string; 
 } 
