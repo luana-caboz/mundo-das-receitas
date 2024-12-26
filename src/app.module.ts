@@ -6,13 +6,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Receita } from './receitas/receitas.model';
 
 @Module({
-  imports: [ReceitasModule,
+  imports: [
+    ReceitasModule,
     TypeOrmModule.forRoot({
-      type: 'sqlite',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      type: 'postgres',
       database: 'receitas_db',
       entities: [Receita],
       synchronize: true,
-      })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

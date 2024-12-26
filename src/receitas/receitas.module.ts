@@ -5,10 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Receita } from './receitas.model';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Receita]), 
-  ],
+  imports: [TypeOrmModule.forFeature([Receita])],
   providers: [ReceitasService],
-  controllers: [ReceitasController]
+  controllers: [ReceitasController],
 })
 export class ReceitasModule {}

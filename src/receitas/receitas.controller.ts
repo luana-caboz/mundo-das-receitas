@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CriarReceitaDto } from './dto/criar-receita.dto';
 import { Receita } from './receitas.model';
 import { ReceitasService } from './receitas.service';
@@ -9,7 +17,7 @@ export class ReceitasController {
 
   @Post()
   criarReceita(@Body() criarReceitaDto: CriarReceitaDto): Promise<Receita> {
-    const { titulo, ingredientes, modoDeFazer } = criarReceitaDto;
+    // const { titulo, ingredientes, modoDeFazer } = criarReceitaDto;
     return this.receitasService.criarReceita(criarReceitaDto);
   }
 
@@ -27,7 +35,8 @@ export class ReceitasController {
   atualizarReceita(
     @Param('id') id: number,
     @Body() dadosAtualizados: Partial<Receita>,
-  ): Promise<Receita> { console.log({id, dadosAtualizados});
+  ): Promise<Receita> {
+    console.log({ id, dadosAtualizados });
     return this.receitasService.atualizar(id, dadosAtualizados);
   }
 
